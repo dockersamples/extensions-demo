@@ -1,53 +1,76 @@
-import React from 'react';
-import Button from '@mui/material/Button';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import { Grid, Button, Typography } from '@mui/material';
 import { createDockerDesktopClient } from '@docker/extension-api-client';
-import { Stack, TextField, Typography } from '@mui/material';
-
-// Note: This line relies on Docker Desktop's presence as a host application.
-// If you're running this React app in a browser, it won't work properly.
-const client = createDockerDesktopClient();
-
-function useDockerDesktopClient() {
-  return client;
-}
 
 export function App() {
-  const [response, setResponse] = React.useState<string>();
-  const ddClient = useDockerDesktopClient();
+  const ddClient = createDockerDesktopClient();
 
-  const fetchAndDisplayResponse = async () => {
-    const result = await ddClient.extension.vm?.service?.get('/hello');
-    setResponse(JSON.stringify(result));
-  };
+  function sayHello() {
+    console.log("Hi Console")
+    ddClient.desktopUI.toast.success('Welcome to Docker Extensions CheatSheet');
+  }
 
   return (
-    <>
-      <Typography variant="h3">Docker extension demo</Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
-        This is a basic page rendered with MUI, using Docker's theme. Read the
-        MUI documentation to learn more. Using MUI in a conventional way and
-        avoiding custom styling will help make sure your extension continues to
-        look great as Docker's theme evolves.
-      </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
-        Pressing the below button will trigger a request to the backend. Its
-        response will appear in the textarea.
-      </Typography>
-      <Stack direction="row" alignItems="start" spacing={2} sx={{ mt: 4 }}>
-        <Button variant="contained" onClick={fetchAndDisplayResponse}>
-          Call backend
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Typography variant="h1" gutterBottom>
+          Welcome to the Docker Extension Cheatsheet
+        </Typography>
+        <Button variant="contained" onClick={sayHello}>
+          Click me!
         </Button>
-
-        <TextField
-          label="Backend response"
-          sx={{ width: 480 }}
-          disabled
-          multiline
-          variant="outlined"
-          minRows={5}
-          value={response ?? ''}
-        />
-      </Stack>
-    </>
+      </Grid>
+      <Grid item xs={12}>
+        <TableContainer component={Paper}>
+          <Table aria-label="cheatsheet table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Commands</TableCell>
+                <TableCell>Command</TableCell>
+                <TableCell>Description</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>Listing</TableCell>
+                <TableCell>docker extension ls</TableCell>
+                <TableCell>List all Docker Extensions</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Initializing</TableCell>
+                <TableCell>docker extension init</TableCell>
+                <TableCell>Create a new Docker Extension based on a template</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Installing</TableCell>
+                <TableCell>docker extension install &lt;extension-name&gt;</TableCell>
+                <TableCell>Install a Docker extension with the specified image</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Removing</TableCell>
+                <TableCell>docker extension rm &lt;extension-name&gt;</TableCell>
+                <TableCell>Remove a Docker extension</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Validating</TableCell>
+                <TableCell>docker extension validate &lt;extension-name&gt;</TableCell>
+                <TableCell>Validate an extension image or metadata file</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Sharing</TableCell>
+                <TableCell>docker extension share &lt;extension-namegt;</TableCell>
+                <TableCell>Generate a link to share the extension</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+    </Grid>
   );
 }
