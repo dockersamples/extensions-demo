@@ -11,7 +11,7 @@ This repo creates an Extension Cheatsheet Demo.
 
 ```
 git clone https://github.com/dockersamples/extensions-demo
-cd extensions-demo
+cd extensions-demo/cheatsheet
 ```
 
 ## Build the Extension
